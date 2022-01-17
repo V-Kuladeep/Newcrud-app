@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import View from "./View";
 
 // getting the values of local storage
-const getDatafromLS = () => {
-  const data = localStorage.getItem("details");
+let getDatafromLS = () => {
+  let data = localStorage.getItem("details");
   if (data) {
     return JSON.parse(data);
   } else {
@@ -11,18 +11,19 @@ const getDatafromLS = () => {
   }
 };
 
-const Employee = () => {
-  const [details, setdetails] = useState(getDatafromLS());
+let Employee = () => {
+  let [details, setdetails] = useState(getDatafromLS());
 
   // input field states
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [isbn, setIsbn] = useState("");
-  const [till, setTill] = useState("");
-  const [city, setCity] = useState("");
+  let [title, setTitle] = useState("");
+  let [author, setAuthor] = useState("");
+  let [isbn, setIsbn] = useState("");
+  let [till, setTill] = useState("");
+  let [city, setCity] = useState("");
+  let [edit, setEdit] = useState("");
 
   // form submit event
-  const handleAddBookSubmit = e => {
+  let handleAddBookSubmit = e => {
     e.preventDefault();
     // creating an object
     let detail = {
@@ -41,11 +42,22 @@ const Employee = () => {
   };
 
   // delete data from LS
-  const deleteBook = isbn => {
-    const filteredBooks = details.filter((element, index) => {
+  let deleteBook = isbn => {
+    let filteredBooks = details.filter((element, index) => {
       return element.isbn !== isbn;
     });
     setdetails(filteredBooks);
+  };
+  // Edit the text
+  let editBook = value => {
+    let editBooks = details.filter((detail, index) => detail !== value);
+    setEdit(editBooks);
+    setTitle(value.title);
+    setAuthor(value.author);
+    setIsbn(value.isbn);
+    setTill(value.till);
+    setCity(value.city);
+    setdetails(editBooks);
   };
 
   // saving data to local storage
@@ -123,7 +135,7 @@ const Employee = () => {
             <thead>
               <tr>
                 <th className="pr-[10px]">Company</th>
-                <th >Designation</th>
+                <th>Designation</th>
                 <th className="pl-[15px]">WorkingSince</th>
                 <th className="pl-[15px]">WorkingTill</th>
                 <th className="pl-[15px]">City</th>
@@ -138,11 +150,20 @@ const Employee = () => {
               <div>
                 <table>
                   <tr>
-                    <View details={details} deleteBook={deleteBook} />
+                    <View
+                      details={details}
+                      deleteBook={deleteBook}
+                      editBook={editBook}
+                    />
                   </tr>
                 </table>
               </div>
-              <button className="bg-red-500 text-white rounded-sm" onClick={() => setdetails([])}>Remove All</button>
+              <button
+                className="bg-red-500 text-white rounded-sm"
+                onClick={() => setdetails([])}
+              >
+                Remove All
+              </button>
             </>
           )}
           {details.length < 1 && <div>No data are added yet</div>}
