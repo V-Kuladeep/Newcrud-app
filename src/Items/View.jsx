@@ -1,7 +1,8 @@
 import React from "react";
 
-const View = ({ details, deleteBook }) => {
-  return details.map(detail => (
+let View = ({ details, deleteBook, editBook }) => {
+  console.log(details);
+  return details.map((detail, index) => (
     <tr key={detail.isbn}>
       <td>{detail.title}</td>
       <td className="pl-[15px]">{detail.author}</td>
@@ -13,9 +14,15 @@ const View = ({ details, deleteBook }) => {
         onClick={() => deleteBook(detail.isbn)}
       >
         Delete
-          </button>
-          <button className="bg-blue-400 text-white ml-3">Edit</button>
+      </button>
+      <button
+        className="bg-blue-400 text-white ml-3"
+        onClick={() => editBook(detail)}
+      >
+        Edit
+      </button>
     </tr>
   ));
 };
 export default View;
+
